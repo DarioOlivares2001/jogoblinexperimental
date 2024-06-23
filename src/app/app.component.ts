@@ -12,6 +12,7 @@ import { AdminproductosComponent } from './component/adminproductos/adminproduct
 import { AuthService } from './services/auth.service';
 import { NotificacionbannerComponent } from './component/notificacionbanner/notificacionbanner.component';
 import { InicioComponent } from './component/inicio/inicio.component';
+import { FacturaComponent } from './component/factura/factura.component';
 
 
 @Component({
@@ -32,7 +33,8 @@ import { InicioComponent } from './component/inicio/inicio.component';
     AdminmenuComponent,
     AdminproductosComponent,
     NotificacionbannerComponent,
-    InicioComponent
+    InicioComponent,
+    FacturaComponent
 
   ],
   templateUrl: './app.component.html',
