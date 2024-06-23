@@ -8,6 +8,7 @@ import { AdminproductosComponent } from './component/adminproductos/adminproduct
 import { AdminusuariosComponent } from './component/adminusuarios/adminusuarios.component';
 import { InicioComponent } from './component/inicio/inicio.component';
 import { PasswordresetComponent } from './component/passwordreset/passwordreset.component';
+import { FacturaComponent } from './component/factura/factura.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'inicio-component', pathMatch: 'full' },
@@ -20,6 +21,7 @@ export const routes: Routes = [
   { path: 'adminmenu-component', component: AdminmenuComponent },
   { path: 'inicio-component', component: InicioComponent },
   { path: 'passwordreset-component', component: PasswordresetComponent },
+  { path: 'factura-component', component: FacturaComponent  },
   { path: '**', redirectTo: 'inicio-component' },
 
 

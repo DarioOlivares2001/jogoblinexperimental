@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { CartService } from '../../services/cart.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-cart',
@@ -13,7 +14,7 @@ export class CartComponent implements OnInit {
   items: any[] = [];
   total: number = 0;
 
-  constructor(private cartService: CartService) {}
+  constructor(private cartService: CartService, private router: Router ) {}
 
   ngOnInit() {
     this.cartService.items$.subscribe(items => {
@@ -27,6 +28,7 @@ export class CartComponent implements OnInit {
   }
 
   pay() {
+    this.router.navigate(['/factura-component']);
   }
 
   changeQuantity(id: number, action: string) {
