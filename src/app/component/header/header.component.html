@@ -20,6 +20,11 @@
             <a class="nav-link" *ngIf="!isAdmin" routerLink="/productlist-component"   routerLinkActive="active">Productos</a>
           </li>
 
+          <li class="nav-item">
+            <a class="nav-link" *ngIf="!isAdmin" href="#promociones" routerLinkActive="active">Promociones</a>
+          </li>
+
+
           <li class="nav-item" *ngIf="isAdmin">
             <a class="nav-link" routerLink="/admin-component"  routerLinkActive="active"  >Admin Dashboard</a>
           </li>

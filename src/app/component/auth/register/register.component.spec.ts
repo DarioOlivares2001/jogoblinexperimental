@@ -5,7 +5,7 @@ import { RegisterComponent } from './register.component';
 import { UserService } from '../../../services/user.service';
 import { of } from 'rxjs';
 
-// Clase mock para UserService para evitar llamadas reales al servicio
+
 class MockUserService {
   addUser(user: any) {
     return of(user);
@@ -21,7 +21,7 @@ describe('RegisterComponent', () => {
     await TestBed.configureTestingModule({
       imports: [ReactiveFormsModule, RouterTestingModule, RegisterComponent],
       providers: [
-        { provide: UserService, useClass: MockUserService } // Utiliza el mock en lugar del servicio real
+        { provide: UserService, useClass: MockUserService }
       ]
     }).compileComponents();
   });
