@@ -20,4 +20,3 @@ RUN if [ -f /usr/share/nginx/html/index.csr.html ]; then mv /usr/share/nginx/htm
 EXPOSE 80
 #jkhdsakjhfd
 CMD ["nginx", "-g", "daemon off;"]
-
