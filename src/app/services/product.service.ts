@@ -1,5 +1,7 @@
 import { Injectable } from '@angular/core';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { BehaviorSubject } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 interface Product {
   id: number;
@@ -12,27 +14,37 @@ interface Product {
   providedIn: 'root'
 })
 export class ProductService {
-  private products: Product[] = this.loadProductsFromLocalStorage();
+  private apiUrl = 'https://api-jogo-alpha.vercel.app/products'; // URL de la API desplegada en Vercel
+  private httpOptions = {
+    headers: new HttpHeaders({
+      'Content-Type': 'application/json'
+    })
+  };
+
+  private products: Product[] = [];
   private productsSubject = new BehaviorSubject<Product[]>(this.products);
   products$ = this.productsSubject.asObservable();
 
-  private isLocalStorageAvailable(): boolean {
-    return typeof localStorage !== 'undefined';
+  constructor(private http: HttpClient) {
+    this.loadProducts();
   }
 
-  private loadProductsFromLocalStorage(): Product[] {
-    if (this.isLocalStorageAvailable()) {
-      const savedProducts = localStorage.getItem('products');
-      return savedProducts ? JSON.parse(savedProducts) : [];
-    } else {
-      return [];
-    }
+  private loadProducts() {
+    this.http.get<Product[]>(this.apiUrl).subscribe(data => {
+      this.products = data;
+      this.productsSubject.next(this.products);
+    });
   }
 
-  private saveProductsToLocalStorage() {
-    if (this.isLocalStorageAvailable()) {
-      localStorage.setItem('products', JSON.stringify(this.products));
-    }
+  private saveProducts() {
+    this.http.post(this.apiUrl, this.products, this.httpOptions).subscribe(
+      response => {
+        console.log('Productos guardados con éxito', response);
+      },
+      error => {
+        console.error('Error al guardar productos', error);
+      }
+    );
   }
 
   getProducts(): Product[] {
@@ -40,21 +52,21 @@ export class ProductService {
   }
 
   addProduct(product: Product) {
-    product.id = this.products.length + 1;
+    product.id = this.products.length > 0 ? Math.max(...this.products.map(p => p.id)) + 1 : 1;
     this.products.push(product);
-    this.saveProductsToLocalStorage();
+    this.saveProducts();
     this.productsSubject.next(this.products);
   }
 
   updateProduct(index: number, product: Product) {
     this.products[index] = product;
-    this.saveProductsToLocalStorage();
+    this.saveProducts();
     this.productsSubject.next(this.products);
   }
 
   deleteProduct(index: number) {
     this.products.splice(index, 1);
-    this.saveProductsToLocalStorage();
+    this.saveProducts();
     this.productsSubject.next(this.products);
   }
 }

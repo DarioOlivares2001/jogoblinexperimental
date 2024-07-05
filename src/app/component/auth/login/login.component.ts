@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
-import { StorageService } from '../../../services/storage.service';
+import { UserService } from '../../../services/user.service';
 import { AuthService } from '../../../services/auth.service';
 
 @Component({
@@ -18,7 +18,7 @@ export class LoginComponent implements OnInit {
 
   constructor(
     private fb: FormBuilder,
-    private storageService: StorageService,
+    private userService: UserService,
     private router: Router,
     private authService: AuthService
   ) {
@@ -34,9 +34,9 @@ export class LoginComponent implements OnInit {
     if (this.loginForm.valid) {
       const { email, password } = this.loginForm.value;
 
-      if (this.storageService.validateUser(email, password)) {
+      if (this.userService.validateUser(email, password)) {
         this.errorMessage = null;
-        const user = this.storageService.getUserByEmail(email);
+        const user = this.userService.getUserByEmail(email);
         const username = user ? user.username : 'Regular User';
         if (email === 'admin@gmail.com') {
           this.authService.loginAsAdmin();

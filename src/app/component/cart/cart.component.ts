@@ -29,6 +29,7 @@ export class CartComponent implements OnInit {
 
   pay() {
     this.router.navigate(['/factura-component']);
+    document.body.classList.remove('showCart');
   }
 
   changeQuantity(id: number, action: string) {
