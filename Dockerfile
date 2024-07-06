@@ -1,5 +1,5 @@
 #jkhdsakjhfd
-FROM node:20.14.0 AS build
+FROM node:latest AS build
 #jkhdsakjhfd
 WORKDIR /app
 #jkhdsakjhfd
