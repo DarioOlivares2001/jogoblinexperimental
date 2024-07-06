@@ -28,8 +28,8 @@
                   <td>{{ product.image }}</td>
                   <td>
                     <button class="btn btn-success btn-sm" (click)="viewProduct(product)" data-bs-toggle="modal" data-bs-target="#readDataModal"><i class="bi bi-eye" style="font-size: 0.8rem;"></i></button>
-                    <button class="btn btn-primary btn-sm" (click)="editProduct(i)" data-bs-toggle="modal" data-bs-target="#productFormModal"><i class="bi bi-pencil-square" style="font-size: 0.8rem;"></i></button>
-                    <button class="btn btn-danger btn-sm" (click)="deleteProduct(i)"><i class="bi bi-trash" style="font-size: 0.8rem;"></i></button>
+                    <button class="btn btn-primary btn-sm" (click)="editProduct(product.id)" data-bs-toggle="modal" data-bs-target="#productFormModal"><i class="bi bi-pencil-square" style="font-size: 0.8rem;"></i></button>
+                    <button class="btn btn-danger btn-sm" (click)="deleteProduct(product.id)"><i class="bi bi-trash" style="font-size: 0.8rem;"></i></button>
                   </td>
                 </tr>
               </tbody>

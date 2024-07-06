@@ -12,6 +12,9 @@ interface Product {
 
 declare var bootstrap: any;
 
+/**
+ * Componente para la administración de productos.
+ */
 @Component({
   selector: 'app-adminproductos',
   standalone: true,
@@ -20,15 +23,47 @@ declare var bootstrap: any;
   styleUrls: ['./adminproductos.component.css']
 })
 export class AdminproductosComponent implements OnInit {
+  /**
+   * Referencia al modal del formulario de producto.
+   */
   @ViewChild('productFormModal') productFormModal!: ElementRef;
 
+  /**
+   * Formulario reactivo para la gestión de productos.
+   */
   productForm: FormGroup;
+
+  /**
+   * Indica si se está editando un producto existente.
+   */
   isEdit = false;
+
+  /**
+   * Índice del producto actualmente seleccionado para edición.
+   */
   currentIndex: number | null = null;
+
+  /**
+   * Fuente de la imagen del producto.
+   */
   imageSrc: string | null = null;
+
+  /**
+   * Producto actualmente seleccionado para visualización.
+   */
   selectedProduct: Product | null = null;
+
+  /**
+   * Lista de productos.
+   */
   products: Product[] = [];
 
+  /**
+   * Constructor del componente.
+   * @param fb - FormBuilder para crear el formulario.
+   * @param productService - Servicio de productos para manejar operaciones relacionadas con productos.
+   * @param platformId - Identificador de la plataforma para detección de plataforma.
+   */
   constructor(
     private fb: FormBuilder,
     private productService: ProductService,
@@ -40,48 +75,64 @@ export class AdminproductosComponent implements OnInit {
     });
   }
 
+  /**
+   * Método de inicialización.
+   */
   ngOnInit() {
-    this.products = this.productService.getProducts();
     this.productService.products$.subscribe(products => this.products = products);
   }
 
+  /**
+   * Prepara el formulario para agregar un nuevo producto.
+   */
   newProduct() {
     this.isEdit = false;
     this.productForm.reset();
     this.imageSrc = null;
   }
 
-  editProduct(index: number) {
+  /**
+   * Prepara el formulario para editar un producto existente.
+   * @param productId - ID del producto a editar.
+   */
+  editProduct(productId: number) {
     this.isEdit = true;
-    this.currentIndex = index;
-    const product = this.products[index];
-    this.productForm.patchValue(product);
-    this.imageSrc = product.image;
+    const product = this.products.find(p => p.id === productId);
+    if (product) {
+      this.currentIndex = productId;
+      this.productForm.patchValue(product);
+      this.imageSrc = product.image;
+    }
   }
 
-  deleteProduct(index: number) {
-    this.productService.deleteProduct(index);
+  /**
+   * Elimina un producto.
+   * @param productId - ID del producto a eliminar.
+   */
+  deleteProduct(productId: number) {
+    this.productService.deleteProduct(productId);
   }
 
+  /**
+   * Guarda el producto, ya sea agregando uno nuevo o actualizando uno existente.
+   */
   saveProduct() {
     const newProduct: Product = {
-      id: this.isEdit && this.currentIndex !== null ? this.products[this.currentIndex].id : this.products.length + 1,
+      id: this.isEdit && this.currentIndex !== null ? this.currentIndex : 0,
       nombre: this.productForm.value.nombre,
       precio: this.productForm.value.precio,
       image: this.imageSrc || 'assets/images/Profile Icon.webp'
     };
 
     if (this.isEdit && this.currentIndex !== null) {
-      this.productService.updateProduct(this.currentIndex, newProduct);
+      newProduct.id = this.currentIndex;
+      this.productService.updateProduct(newProduct);
     } else {
       this.productService.addProduct(newProduct);
     }
 
-    console.log('Nuevo producto agregado:', newProduct);
-
     this.productForm.reset();
     this.imageSrc = null;
-
 
     if (isPlatformBrowser(this.platformId) && this.productFormModal) {
       const modalInstance = bootstrap.Modal.getInstance(this.productFormModal.nativeElement);
@@ -94,6 +145,10 @@ export class AdminproductosComponent implements OnInit {
     }
   }
 
+  /**
+   * Maneja el cambio de archivo de imagen del producto.
+   * @param event - Evento de cambio de archivo.
+   */
   onFileChange(event: any) {
     if (event.target.files && event.target.files.length) {
       const [file] = event.target.files;
@@ -102,6 +157,10 @@ export class AdminproductosComponent implements OnInit {
     }
   }
 
+  /**
+   * Visualiza los detalles de un producto seleccionado.
+   * @param product - Producto a visualizar.
+   */
   viewProduct(product: Product) {
     this.selectedProduct = product;
   }

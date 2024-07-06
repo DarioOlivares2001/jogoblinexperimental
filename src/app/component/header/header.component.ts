@@ -8,6 +8,9 @@ import { AdminproductosComponent } from '../adminproductos/adminproductos.compon
 import { AuthService } from '../../services/auth.service';
 import { CartService } from '../../services/cart.service';
 
+/**
+ * Componente para el encabezado de la aplicación.
+ */
 @Component({
   selector: 'app-header',
   standalone: true,
@@ -16,14 +19,41 @@ import { CartService } from '../../services/cart.service';
   styleUrls: ['./header.component.css']
 })
 export class HeaderComponent implements OnInit {
+  /**
+   * Indicador de si el usuario es administrador.
+   */
   isAdmin: boolean = false;
+
+  /**
+   * Indicador de si el usuario ha iniciado sesión.
+   */
   isLoggedIn: boolean = false;
+
+  /**
+   * Contador de ítems en el carrito.
+   */
   cartItemCount: number = 0;
+
+  /**
+   * Indicador de latido del corazón para animación.
+   */
   heartbeat: boolean = false;
+
+  /**
+   * Nombre de usuario del usuario autenticado.
+   */
   username: string | null = null;
 
+  /**
+   * Constructor del componente.
+   * @param authService - Servicio de autenticación para manejar el estado del usuario.
+   * @param cartService - Servicio del carrito para manejar operaciones relacionadas con el carrito.
+   */
   constructor(private authService: AuthService, private cartService: CartService) {}
 
+  /**
+   * Método de inicialización.
+   */
   ngOnInit() {
     this.authService.isAdmin$.subscribe(isAdmin => {
       this.isAdmin = isAdmin;
@@ -44,14 +74,23 @@ export class HeaderComponent implements OnInit {
     });
   }
 
+  /**
+   * Muestra u oculta el carrito.
+   */
   showCart() {
     document.body.classList.toggle('showCart');
   }
 
+  /**
+   * Muestra u oculta el menú de administración.
+   */
   toggleAdminMenu() {
     document.body.classList.toggle('showAdmin');
   }
 
+  /**
+   * Cierra la sesión del usuario.
+   */
   logout() {
     this.authService.logout();
   }

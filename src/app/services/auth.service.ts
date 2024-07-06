@@ -22,7 +22,7 @@ export class AuthService {
     this.isLoggedInSubject.next(true);
     this.setToLocalStorage('isAdmin', 'true');
     this.setToLocalStorage('isLoggedIn', 'true');
-    this.setToLocalStorage('username', 'Admin User'); // Guarda el nombre del usuario
+    this.setToLocalStorage('username', 'Admin User');
     this.usernameSubject.next('Admin User');
     this.router.navigate(['adminproductos-component']);
   }

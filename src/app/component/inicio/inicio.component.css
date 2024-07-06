@@ -1,5 +1,6 @@
 .carousel-container {
   margin-bottom: 0px;
+  z-index: 500;
 }
 
 .carousel-item {
@@ -37,8 +38,8 @@
 }
 
 .container {
-
-  margin-bottom: 300px;
+  margin-top: 50px;
+  margin-bottom: 100px;
 }
 
 .titulo-promociones-container {
@@ -104,4 +105,32 @@
 .listaProductos .item button:hover {
   background-color: #422e9b;
   box-shadow: 0 0 20px rgba(66, 46, 155, 0.8);
+}
+
+
+
+@media only screen and (max-width: 1200px) {
+  .listaProductos {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media only screen and (max-width: 992px) {
+  .listaProductos {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media only screen and (max-width: 767px) {
+  .container-product {
+    margin-top: 50px !important;
+  }
+
+  .listaProductos {
+    grid-template-columns: 1fr;
+  }
+
+  .listaProductos .item img {
+    width: 80%;
+  }
 }

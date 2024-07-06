@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { BehaviorSubject } from 'rxjs';
-import { map } from 'rxjs/operators';
 
 interface Product {
   id: number;
@@ -14,7 +13,7 @@ interface Product {
   providedIn: 'root'
 })
 export class ProductService {
-  private apiUrl = 'https://api-jogo-alpha.vercel.app/products'; // URL de la API desplegada en Vercel
+  private apiUrl = 'https://api-jogo-qucx.onrender.com'; // URL de la API desplegada en Render
   private httpOptions = {
     headers: new HttpHeaders({
       'Content-Type': 'application/json'
@@ -30,21 +29,10 @@ export class ProductService {
   }
 
   private loadProducts() {
-    this.http.get<Product[]>(this.apiUrl).subscribe(data => {
+    this.http.get<Product[]>(`${this.apiUrl}/products`).subscribe(data => {
       this.products = data;
       this.productsSubject.next(this.products);
     });
-  }
-
-  private saveProducts() {
-    this.http.post(this.apiUrl, this.products, this.httpOptions).subscribe(
-      response => {
-        console.log('Productos guardados con éxito', response);
-      },
-      error => {
-        console.error('Error al guardar productos', error);
-      }
-    );
   }
 
   getProducts(): Product[] {
@@ -52,21 +40,45 @@ export class ProductService {
   }
 
   addProduct(product: Product) {
-    product.id = this.products.length > 0 ? Math.max(...this.products.map(p => p.id)) + 1 : 1;
-    this.products.push(product);
-    this.saveProducts();
-    this.productsSubject.next(this.products);
+    this.http.post<Product>(`${this.apiUrl}/products`, product, this.httpOptions).subscribe({
+      next: (response) => {
+        this.products.push(response);
+        this.productsSubject.next(this.products);
+        console.log('Producto agregado con éxito');
+      },
+      error: (error) => {
+        console.error('Error al agregar producto', error);
+      }
+    });
   }
 
-  updateProduct(index: number, product: Product) {
-    this.products[index] = product;
-    this.saveProducts();
-    this.productsSubject.next(this.products);
+  updateProduct(product: Product) {
+    this.http.post(`${this.apiUrl}/products/update`, product, this.httpOptions).subscribe({
+      next: () => {
+        const index = this.products.findIndex(p => p.id === product.id);
+        if (index !== -1) {
+          this.products[index] = product;
+          this.productsSubject.next(this.products);
+        }
+        console.log('Producto actualizado con éxito');
+      },
+      error: (error) => {
+        console.error('Error al actualizar producto', error);
+      }
+    });
   }
 
-  deleteProduct(index: number) {
-    this.products.splice(index, 1);
-    this.saveProducts();
-    this.productsSubject.next(this.products);
+  deleteProduct(productId: number) {
+    const url = `${this.apiUrl}/products/delete`;
+    this.http.post(url, { id: productId }, this.httpOptions).subscribe({
+      next: () => {
+        this.products = this.products.filter(p => p.id !== productId);
+        this.productsSubject.next(this.products);
+        console.log('Producto eliminado con éxito');
+      },
+      error: (error) => {
+        console.error('Error al eliminar el producto', error);
+      }
+    });
   }
 }

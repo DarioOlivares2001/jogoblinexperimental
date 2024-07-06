@@ -13,6 +13,7 @@ import { AuthService } from './services/auth.service';
 import { NotificacionbannerComponent } from './component/notificacionbanner/notificacionbanner.component';
 import { InicioComponent } from './component/inicio/inicio.component';
 import { FacturaComponent } from './component/factura/factura.component';
+import { Nabvar2Component } from './component/nabvar2/nabvar2.component';
 
 
 @Component({
@@ -34,7 +35,8 @@ import { FacturaComponent } from './component/factura/factura.component';
     AdminproductosComponent,
     NotificacionbannerComponent,
     InicioComponent,
-    FacturaComponent
+    FacturaComponent,
+    Nabvar2Component
 
   ],
   templateUrl: './app.component.html',

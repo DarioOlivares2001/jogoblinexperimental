@@ -5,6 +5,9 @@ import { Router, RouterLink } from '@angular/router';
 import { UserService } from '../../../services/user.service';
 import { AuthService } from '../../../services/auth.service';
 
+/**
+ * Componente de login que maneja la autenticación de usuarios.
+ */
 @Component({
   selector: 'app-login',
   standalone: true,
@@ -13,9 +16,23 @@ import { AuthService } from '../../../services/auth.service';
   styleUrls: ['./login.component.css']
 })
 export class LoginComponent implements OnInit {
+  /**
+   * Formulario de login.
+   */
   loginForm: FormGroup;
+
+  /**
+   * Mensaje de error que se muestra cuando las credenciales son inválidas.
+   */
   errorMessage: string | null = null;
 
+  /**
+   * Constructor del componente.
+   * @param fb - FormBuilder para crear el formulario.
+   * @param userService - Servicio de usuarios para validar credenciales.
+   * @param router - Router para la navegación.
+   * @param authService - Servicio de autenticación para manejar el estado de la sesión.
+   */
   constructor(
     private fb: FormBuilder,
     private userService: UserService,
@@ -28,8 +45,14 @@ export class LoginComponent implements OnInit {
     });
   }
 
+  /**
+   * Método de inicialización.
+   */
   ngOnInit(): void {}
 
+  /**
+   * Maneja el envío del formulario de login.
+   */
   onSubmit() {
     if (this.loginForm.valid) {
       const { email, password } = this.loginForm.value;
@@ -53,10 +76,16 @@ export class LoginComponent implements OnInit {
     }
   }
 
+  /**
+   * Obtiene el control de correo electrónico del formulario.
+   */
   get email() {
     return this.loginForm.get('email');
   }
 
+  /**
+   * Obtiene el control de contraseña del formulario.
+   */
   get password() {
     return this.loginForm.get('password');
   }
