@@ -15,7 +15,9 @@ import { InicioComponent } from './component/inicio/inicio.component';
 import { FacturaComponent } from './component/factura/factura.component';
 import { Nabvar2Component } from './component/nabvar2/nabvar2.component';
 
-
+/**
+ * Componente raíz de la aplicación.
+ */
 @Component({
   selector: 'app-root',
   standalone: true,
@@ -37,21 +39,37 @@ import { Nabvar2Component } from './component/nabvar2/nabvar2.component';
     InicioComponent,
     FacturaComponent,
     Nabvar2Component
-
   ],
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
 export class AppComponent implements OnInit {
+  /**
+   * Título de la aplicación.
+   */
   title = 'Experimento';
+
+  /**
+   * Indica si el usuario actual es administrador.
+   */
   isAdmin: boolean = false;
 
+  /**
+   * Constructor del componente.
+   * @param authService - Servicio de autenticación para manejar el estado del usuario.
+   */
   constructor(private authService: AuthService) {}
 
+  /**
+   * Método para mostrar u ocultar el carrito de compras.
+   */
   toggleCart() {
     document.body.classList.toggle('showCart');
   }
 
+  /**
+   * Método de inicialización.
+   */
   ngOnInit() {
     this.authService.isAdmin$.subscribe(isAdmin => {
       this.isAdmin = isAdmin;
