@@ -2,6 +2,9 @@ import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 
+/**
+ * Componente para restablecer la contraseña del usuario.
+ */
 @Component({
   selector: 'app-passwordreset',
   standalone: true,
@@ -10,22 +13,46 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
   styleUrls: ['./passwordreset.component.css']
 })
 export class PasswordresetComponent implements OnInit {
+  /**
+   * Formulario de restablecimiento de contraseña.
+   */
   passwordResetForm!: FormGroup;
+
+  /**
+   * Indica si el email de restablecimiento de contraseña ha sido enviado.
+   */
   emailSent = false;
+
+  /**
+   * Indica si el usuario no fue encontrado.
+   */
   userNotFound = false;
 
+  /**
+   * Constructor del componente.
+   * @param fb - FormBuilder para crear el formulario de restablecimiento de contraseña.
+   */
   constructor(private fb: FormBuilder) {}
 
+  /**
+   * Método de inicialización.
+   */
   ngOnInit(): void {
     this.passwordResetForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]]
     });
   }
 
+  /**
+   * Devuelve el control del campo email del formulario.
+   */
   get email() {
     return this.passwordResetForm.get('email');
   }
 
+  /**
+   * Maneja el envío del formulario de restablecimiento de contraseña.
+   */
   onSubmit(): void {
     this.userNotFound = false;
     this.emailSent = false;

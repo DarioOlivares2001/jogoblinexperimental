@@ -4,8 +4,11 @@ import { CartService } from '../../services/cart.service';
 import { AuthService } from '../../services/auth.service';
 import { Router } from '@angular/router';
 import { UserService } from '../../services/user.service';
-import { InvoiceService } from '../../services/invoice.service'; // Importar InvoiceService
+import { InvoiceService } from '../../services/invoice.service';
 
+/**
+ * Componente para la visualización de la factura.
+ */
 @Component({
   selector: 'app-factura',
   standalone: true,
@@ -14,24 +17,54 @@ import { InvoiceService } from '../../services/invoice.service'; // Importar Inv
   styleUrls: ['./factura.component.css']
 })
 export class FacturaComponent implements OnInit {
+  /**
+   * Lista de ítems en la factura.
+   */
   items: any[] = [];
+
+  /**
+   * Total de la factura.
+   */
   total: number = 0;
+
+  /**
+   * Información del usuario.
+   */
   userInfo = {
     nombre: '',
     email: '',
     direccion: ''
   };
-  orderNumber: number = 0; // Campo para el número de orden de venta
-  invoiceNumber: number = 0; // Campo para el número de factura
 
+  /**
+   * Número de orden de venta.
+   */
+  orderNumber: number = 0;
+
+  /**
+   * Número de factura.
+   */
+  invoiceNumber: number = 0;
+
+  /**
+   * Constructor del componente.
+   * @param cartService - Servicio del carrito para manejar operaciones relacionadas con el carrito.
+   * @param authService - Servicio de autenticación para manejar el estado del usuario.
+   * @param router - Router para la navegación.
+   * @param userService - Servicio de usuarios para manejar operaciones relacionadas con usuarios.
+   * @param invoiceService - Servicio de facturas para manejar operaciones relacionadas con facturas.
+   */
   constructor(
     private cartService: CartService,
     private authService: AuthService,
     private router: Router,
     private userService: UserService,
-    private invoiceService: InvoiceService // Agregar InvoiceService al constructor
+    private invoiceService: InvoiceService
   ) {}
 
+  /**
+   * Método de inicialización.
+   */
   ngOnInit() {
     this.items = this.cartService.getCartFromLocalStorage();
     this.total = this.cartService.getTotal();
@@ -44,24 +77,33 @@ export class FacturaComponent implements OnInit {
           this.userInfo.nombre = user.username;
           this.userInfo.email = user.email;
           this.userInfo.direccion = user.address || 'No disponible';
-          this.orderNumber = this.generateOrderNumber(); // Generar el número de orden de venta
-          this.invoiceNumber = this.generateInvoiceNumber(); // Generar el número de factura
-          this.saveInvoice(); // Guardar la factura después de obtener la información del usuario
+          this.orderNumber = this.generateOrderNumber();
+          this.invoiceNumber = this.generateInvoiceNumber();
+          this.saveInvoice();
         }
       });
     }
   }
 
+  /**
+   * Genera un número de orden de venta aleatorio.
+   * @returns Número de orden de venta.
+   */
   generateOrderNumber(): number {
-    // Lógica para generar un número de orden de venta
     return Math.floor(Math.random() * 1000000);
   }
 
+  /**
+   * Genera un número de factura aleatorio.
+   * @returns Número de factura.
+   */
   generateInvoiceNumber(): number {
-    // Lógica para generar un número de factura
     return Math.floor(Math.random() * 1000000);
   }
 
+  /**
+   * Guarda la factura en el servicio de facturas.
+   */
   saveInvoice() {
     const invoice = {
       id: 0,
@@ -73,6 +115,6 @@ export class FacturaComponent implements OnInit {
       date: new Date().toISOString()
     };
 
-    this.invoiceService.addInvoice(invoice); // Usar InvoiceService para guardar la factura
+    this.invoiceService.addInvoice(invoice);
   }
 }

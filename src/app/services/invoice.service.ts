@@ -3,6 +3,9 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
+/**
+ * Interfaz que representa una factura.
+ */
 interface Invoice {
   id?: number;
   orderNumber: number;
@@ -17,25 +20,49 @@ interface Invoice {
   date: string;
 }
 
+/**
+ * Servicio para manejar las operaciones relacionadas con facturas.
+ */
 @Injectable({
   providedIn: 'root'
 })
 export class InvoiceService {
+  /**
+   * URL de la API.
+   */
   private apiUrl = 'https://api-jogo-qucx.onrender.com';
+
+  /**
+   * Opciones HTTP para las solicitudes.
+   */
   private httpOptions = {
     headers: new HttpHeaders({
       'Content-Type': 'application/json'
     })
   };
 
+  /**
+   * Lista de facturas.
+   */
   private invoices: Invoice[] = [];
+
+  /**
+   * Sujeto para la lista de facturas.
+   */
   private invoicesSubject = new BehaviorSubject<Invoice[]>(this.invoices);
   invoices$ = this.invoicesSubject.asObservable();
 
+  /**
+   * Constructor del servicio de facturas.
+   * @param http - Cliente HTTP para realizar solicitudes.
+   */
   constructor(private http: HttpClient) {
     this.loadInvoices();
   }
 
+  /**
+   * Carga las facturas desde la API.
+   */
   private loadInvoices() {
     this.http.get<Invoice[]>(`${this.apiUrl}/invoices`).subscribe(data => {
       this.invoices = data;
@@ -43,10 +70,18 @@ export class InvoiceService {
     });
   }
 
+  /**
+   * Obtiene la lista de facturas.
+   * @returns Lista de facturas.
+   */
   getInvoices(): Invoice[] {
     return this.invoices;
   }
 
+  /**
+   * Añade una nueva factura.
+   * @param invoice - La factura a añadir.
+   */
   addInvoice(invoice: Invoice) {
     this.http.post<Invoice>(`${this.apiUrl}/invoices`, invoice, this.httpOptions).subscribe({
       next: (response) => {
@@ -60,6 +95,10 @@ export class InvoiceService {
     });
   }
 
+  /**
+   * Actualiza una factura existente.
+   * @param invoice - La factura a actualizar.
+   */
   updateInvoice(invoice: Invoice) {
     this.http.put(`${this.apiUrl}/invoices/${invoice.id}`, invoice, this.httpOptions).subscribe({
       next: () => {
@@ -76,6 +115,10 @@ export class InvoiceService {
     });
   }
 
+  /**
+   * Elimina una factura.
+   * @param invoiceId - El ID de la factura a eliminar.
+   */
   deleteInvoice(invoiceId: number) {
     const url = `${this.apiUrl}/invoices/${invoiceId}`;
     this.http.delete(url, this.httpOptions).subscribe({
@@ -90,6 +133,11 @@ export class InvoiceService {
     });
   }
 
+  /**
+   * Obtiene una factura por su ID.
+   * @param invoiceId - El ID de la factura a obtener.
+   * @returns Un observable con la factura correspondiente.
+   */
   getInvoiceById(invoiceId: number): Observable<Invoice | undefined> {
     return this.http.get<Invoice[]>(`${this.apiUrl}/invoices`).pipe(
       map(invoices => invoices.find(invoice => invoice.id === invoiceId))
