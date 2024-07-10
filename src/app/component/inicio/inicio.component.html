@@ -1,4 +1,4 @@
-<div id="myCarousel" class="carousel slide mb-6 carousel-container" data-bs-ride="carousel" style="margin-top: 114px;">
+<div id="myCarousel" class="carousel slide mb-6 carousel-container" data-bs-ride="carousel" style="margin-top: 100px;">
   <div class="carousel-indicators">
     <button type="button" data-bs-target="#myCarousel" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
     <button type="button" data-bs-target="#myCarousel" data-bs-slide-to="1" aria-label="Slide 2"></button>
@@ -54,12 +54,10 @@
     <span class="visually-hidden">Next</span>
   </button>
 </div>
-<div class="titulo-promociones-container">
+<div  class="titulo-promociones-container">
   <h2 class="titulo-promociones">Promociones</h2>
 </div>
 <div class="container">
-
-  <div class="d-flex align-items-center justify-content-center vh-100">
     <div class="listaProductos">
       <div class="item" *ngFor="let product of products">
         <img [src]="product.image" alt="{{ product.nombre }}">
@@ -70,5 +68,4 @@
         </div>
       </div>
     </div>
-  </div>
 </div>

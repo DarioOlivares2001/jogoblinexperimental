@@ -14,6 +14,9 @@ interface User {
 
 declare var bootstrap: any;
 
+/**
+ * Componente para la administración de usuarios.
+ */
 @Component({
   selector: 'app-adminusuarios',
   standalone: true,
@@ -22,14 +25,42 @@ declare var bootstrap: any;
   styleUrls: ['./adminusuarios.component.css']
 })
 export class AdminusuariosComponent implements OnInit {
+  /**
+   * Referencia al modal del formulario de usuario.
+   */
   @ViewChild('userFormModal') userFormModal!: ElementRef;
 
+  /**
+   * Formulario reactivo para la gestión de usuarios.
+   */
   userForm: FormGroup;
+
+  /**
+   * Indica si se está editando un usuario existente.
+   */
   isEdit = false;
+
+  /**
+   * Índice del usuario actualmente seleccionado para edición.
+   */
   currentIndex: number | null = null;
+
+  /**
+   * Usuario actualmente seleccionado para visualización.
+   */
   selectedUser: User | null = null;
+
+  /**
+   * Lista de usuarios.
+   */
   users: User[] = [];
 
+  /**
+   * Constructor del componente.
+   * @param fb - FormBuilder para crear el formulario.
+   * @param userService - Servicio de usuarios para manejar operaciones relacionadas con usuarios.
+   * @param platformId - Identificador de la plataforma para detección de plataforma.
+   */
   constructor(
     private fb: FormBuilder,
     private userService: UserService,
@@ -44,16 +75,25 @@ export class AdminusuariosComponent implements OnInit {
     });
   }
 
+  /**
+   * Método de inicialización.
+   */
   ngOnInit() {
-    this.users = this.userService.getUsers();
     this.userService.users$.subscribe(users => this.users = users);
   }
 
+  /**
+   * Prepara el formulario para agregar un nuevo usuario.
+   */
   newUser() {
     this.isEdit = false;
     this.userForm.reset();
   }
 
+  /**
+   * Prepara el formulario para editar un usuario existente.
+   * @param index - Índice del usuario a editar.
+   */
   editUser(index: number) {
     this.isEdit = true;
     this.currentIndex = index;
@@ -61,10 +101,18 @@ export class AdminusuariosComponent implements OnInit {
     this.userForm.patchValue(user);
   }
 
+  /**
+   * Elimina un usuario.
+   * @param index - Índice del usuario a eliminar.
+   */
   deleteUser(index: number) {
-    this.userService.deleteUser(index);
+    const userId = this.users[index].id;
+    this.userService.deleteUser(userId);
   }
 
+  /**
+   * Guarda el usuario, ya sea agregando uno nuevo o actualizando uno existente.
+   */
   saveUser() {
     const newUser: User = {
       id: this.isEdit && this.currentIndex !== null ? this.users[this.currentIndex].id : this.users.length + 1,
@@ -76,7 +124,8 @@ export class AdminusuariosComponent implements OnInit {
     };
 
     if (this.isEdit && this.currentIndex !== null) {
-      this.userService.updateUser(this.currentIndex, newUser);
+      newUser.id = this.users[this.currentIndex].id;
+      this.userService.updateUser(newUser);
     } else {
       this.userService.addUser(newUser);
     }
@@ -84,7 +133,6 @@ export class AdminusuariosComponent implements OnInit {
     console.log('Nuevo usuario agregado:', newUser);
 
     this.userForm.reset();
-
 
     if (isPlatformBrowser(this.platformId) && this.userFormModal) {
       const modalInstance = bootstrap.Modal.getInstance(this.userFormModal.nativeElement);
@@ -97,6 +145,10 @@ export class AdminusuariosComponent implements OnInit {
     }
   }
 
+  /**
+   * Visualiza los detalles de un usuario seleccionado.
+   * @param user - Usuario a visualizar.
+   */
   viewUser(user: User) {
     this.selectedUser = user;
   }

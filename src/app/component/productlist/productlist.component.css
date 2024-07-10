@@ -1,6 +1,10 @@
 .container {
-  margin-top: 250px;
-  margin-bottom: 300px;
+  margin-top: 200px !important;
+  max-width: 90vw;
+  text-align: center;
+  padding-top: 10px;
+  transition: transform 0.5s;
+  margin-bottom: 100px;
 }
 
 .listaProductos {
@@ -24,7 +28,7 @@
 }
 
 .listaProductos .item img {
-  width: 90%;
+  width: 100%;
 }
 
 .listaProductos .item h2 {
@@ -34,7 +38,7 @@
 
 .listaProductos .item .precio {
   letter-spacing: 1px;
-  font-size:medium;
+  font-size: medium;
 }
 
 .listaProductos .item button {
@@ -52,4 +56,30 @@
 .listaProductos .item button:hover {
   background-color: #422e9b;
   box-shadow: 0 0 20px rgba(66, 46, 155, 0.8);
+}
+
+@media only screen and (max-width: 1200px) {
+  .listaProductos {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media only screen and (max-width: 992px) {
+  .listaProductos {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media only screen and (max-width: 767px) {
+  .container-product {
+    margin-top: 50px !important;
+  }
+
+  .listaProductos {
+    grid-template-columns: 1fr;
+  }
+
+  .listaProductos .item img {
+    width: 80%;
+  }
 }

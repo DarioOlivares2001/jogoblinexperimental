@@ -1,5 +1,4 @@
-<div class="container">
-  <div class="d-flex align-items-center justify-content-center vh-100" >
+<div class="container d-flex flex-column flex-sm-row justify-content-between py-4 my-4 border-top">
   <div class="listaProductos">
     <div class="item" *ngFor="let product of products">
       <img [src]="product.image" alt="{{ product.nombre }}">
@@ -9,6 +8,5 @@
         <button (click)="addToCart(product)">Agregar</button>
       </div>
     </div>
-  </div>
   </div>
 </div>

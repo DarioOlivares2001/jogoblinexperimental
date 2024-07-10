@@ -27,11 +27,11 @@ describe('AuthService', () => {
     localStorage.clear();
   });
 
-  it('should be created', () => {
+  it('debería ser creado', () => {
     expect(service).toBeTruthy();
   });
 
-  it('should log in as admin', () => {
+  it('debería iniciar sesión como administrador', () => {
     service.loginAsAdmin();
     expect(service.isAdmin()).toBe(true);
     expect(service.isLoggedIn()).toBe(true);
@@ -42,7 +42,7 @@ describe('AuthService', () => {
     expect(router.navigate).toHaveBeenCalledWith(['adminproductos-component']);
   });
 
-  it('should log in as user', () => {
+  it('debería iniciar sesión como usuario', () => {
     service.loginAsUser('Regular User');
     expect(service.isAdmin()).toBe(false);
     expect(service.isLoggedIn()).toBe(true);
@@ -52,7 +52,7 @@ describe('AuthService', () => {
     expect(localStorage.getItem('username')).toBe('Regular User');
   });
 
-  it('should log out', () => {
+  it('debería cerrar sesión', () => {
     service.loginAsAdmin();
     service.logout();
     expect(service.isAdmin()).toBe(false);
@@ -64,19 +64,19 @@ describe('AuthService', () => {
     expect(router.navigate).toHaveBeenCalledWith(['inicio-component']);
   });
 
-  it('should return correct admin status', () => {
+  it('debería devolver el estado de administrador correcto', () => {
     expect(service.isAdmin()).toBe(false);
     service.loginAsAdmin();
     expect(service.isAdmin()).toBe(true);
   });
 
-  it('should return correct login status', () => {
+  it('debería devolver el estado de inicio de sesión correcto', () => {
     expect(service.isLoggedIn()).toBe(false);
     service.loginAsUser('Regular User');
     expect(service.isLoggedIn()).toBe(true);
   });
 
-  it('should return correct username', () => {
+  it('debería devolver el nombre de usuario correcto', () => {
     expect(service.getUsername()).toBeNull();
     service.loginAsUser('Regular User');
     expect(service.getUsername()).toBe('Regular User');

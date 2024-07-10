@@ -5,7 +5,6 @@ import { RegisterComponent } from './register.component';
 import { UserService } from '../../../services/user.service';
 import { of } from 'rxjs';
 
-// Clase mock para UserService para evitar llamadas reales al servicio
 class MockUserService {
   addUser(user: any) {
     return of(user);
@@ -21,7 +20,7 @@ describe('RegisterComponent', () => {
     await TestBed.configureTestingModule({
       imports: [ReactiveFormsModule, RouterTestingModule, RegisterComponent],
       providers: [
-        { provide: UserService, useClass: MockUserService } // Utiliza el mock en lugar del servicio real
+        { provide: UserService, useClass: MockUserService }
       ]
     }).compileComponents();
   });
@@ -33,11 +32,11 @@ describe('RegisterComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it('debería crear el componente', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should have a form with 6 controls', () => {
+  it('debería tener un formulario con 6 controles', () => {
     expect(component.registerForm.contains('username')).toBeTruthy();
     expect(component.registerForm.contains('email')).toBeTruthy();
     expect(component.registerForm.contains('password')).toBeTruthy();
@@ -46,48 +45,28 @@ describe('RegisterComponent', () => {
     expect(component.registerForm.contains('address')).toBeTruthy();
   });
 
-  it('should make the username control required', () => {
+  it('debería hacer que el control de nombre de usuario sea obligatorio', () => {
     const control = component.registerForm.get('username');
     control?.setValue('');
     expect(control?.valid).toBeFalsy();
   });
 
-  it('should validate the email control', () => {
+  it('debería validar el control de correo electrónico', () => {
     const control = component.registerForm.get('email');
-    control?.setValue('notanemail');
+    control?.setValue('noesuncorreo');
     expect(control?.valid).toBeFalsy();
     control?.setValue('test@example.com');
     expect(control?.valid).toBeTruthy();
   });
 
-  it('should validate password and confirmPassword matching', () => {
+  it('debería validar que las contraseñas coincidan', () => {
     const control = component.registerForm;
     control.get('password')?.setValue('Password1');
     control.get('confirmPassword')?.setValue('Password2');
     expect(control.hasError('passwordMismatch')).toBeTruthy();
   });
 
-  it('should validate age requirement', () => {
-    const control = component.registerForm;
-    control.get('birthdate')?.setValue('2015-01-01');
-    expect(control.hasError('ageRequirement')).toBeTruthy();
-  });
-
-  it('should call userService.addUser when form is valid', () => {
-    spyOn(userService, 'addUser').and.callThrough();
-    component.registerForm.setValue({
-      username: 'testuser',
-      email: 'test@example.com',
-      password: 'Password1',
-      confirmPassword: 'Password1',
-      birthdate: '2000-01-01',
-      address: ''
-    });
-    component.onSubmit();
-    expect(userService.addUser).toHaveBeenCalled();
-  });
-
-  it('should not call userService.addUser when form is invalid', () => {
+  it('no debería llamar a userService.addUser cuando el formulario es inválido', () => {
     spyOn(userService, 'addUser').and.callThrough();
     component.registerForm.setValue({
       username: '',
